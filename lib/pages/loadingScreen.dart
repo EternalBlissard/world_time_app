@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'package:world_time_app/services/world_time.dart';
+// import 'package:flutter_spinkit/src/';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 class LoadingPage extends StatefulWidget {
   const LoadingPage({super.key});
 
@@ -10,27 +14,19 @@ class LoadingPage extends StatefulWidget {
 
 class _LoadingPageState extends State<LoadingPage> {
 
-  void getTime() async{
-    //Test
-    // Response response=await get(Uri.https('jsonplaceholder.typicode.com','todos/1'));
-    // Map data = jsonDecode(response.body);
-    // print(data['userId']);
-
-    // make the request
-    Response response = await get(Uri.https('worldtimeapi.org','api/timezone/Europe/London'));
-    Map data = jsonDecode(response.body);
-    // print(data);
-
-    //getting the properties from the data
-    String dateTime = data['datetime'];
-    String offset = data['utc_offset'].substring(1,3);
-    print(dateTime);
-    print(offset);
-
-    //create Date Time Object
-    DateTime now = DateTime.parse(dateTime);
-    now=now.add(Duration(hours: int.parse(offset)+1));
-    print(now);
+  // String currTime = 'loading';
+  void setupWorldTime() async{
+    WorldTime instance = WorldTime(location: 'Berlin', urlMain: 'Europe/Berlin', flag: 'germany.png');
+    await instance.getTime();
+    Navigator.pushReplacementNamed(context, '/home',arguments: {
+      'location' : instance.location,
+      'flag' : instance.flag,
+      'time' : instance.time,
+    });
+    // print(instance.time);
+    // setState(() {
+    //   currTime = instance.time;
+    // });
   }
 
   @override
@@ -38,13 +34,25 @@ class _LoadingPageState extends State<LoadingPage> {
     // TODO: implement initState
     super.initState();
     // print('initState  function ran');
-    getTime();
+    setupWorldTime();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text('loader'),
+      backgroundColor: Colors.grey[800],
+      body:Center(
+        child: SpinKitFadingCircle(
+          color: Colors.white,
+          size: 80.0,
+          // controller: AnimationController(vsync: this, duration: const Duration(milliseconds: 1200)),
+        ),
+      ),
+
+      // body: Padding(
+      //   padding: EdgeInsets.all(50.0),
+      //   child: Text('loading'),
+      // ),
     );
   }
 }
