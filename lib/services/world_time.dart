@@ -12,6 +12,8 @@ class WorldTime{
   String urlMain='';
   //Additional String URL
   // String AdditonalURL = 'api/timezone/';
+  //true or false depending day or night
+  bool isDayNight=false;
 
   WorldTime({required this.location, required this.urlMain, required this.flag});
 
@@ -38,6 +40,7 @@ class WorldTime{
       now=now.add(Duration(hours: int.parse(offset)));
       print(now);
 
+      isDayNight= now.hour > 6 && now.hour < 20 ? true : false;
       //set the property
       time = DateFormat.jm().format(now);
     }

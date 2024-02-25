@@ -22,6 +22,7 @@ class _LoadingPageState extends State<LoadingPage> {
       'location' : instance.location,
       'flag' : instance.flag,
       'time' : instance.time,
+      'isDayTime' : instance.isDayNight,
     });
     // print(instance.time);
     // setState(() {
