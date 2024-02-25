@@ -32,15 +32,17 @@ class WorldTime{
       //getting the properties from the data
       String dateTime = data['datetime'];
       String offset = data['utc_offset'].substring(1,3);
+      int mul = (data['utc_offset'].substring(0,1)=='-')? -1 :1;
       print(dateTime);
       print(offset);
 
       //create Date Time Object
       DateTime now = DateTime.parse(dateTime);
-      now=now.add(Duration(hours: int.parse(offset)));
+      now=now.add(Duration(hours: (int.parse(offset) * mul)));
       print(now);
 
       isDayNight= now.hour > 6 && now.hour < 20 ? true : false;
+      print("hi $isDayNight");
       //set the property
       time = DateFormat.jm().format(now);
     }

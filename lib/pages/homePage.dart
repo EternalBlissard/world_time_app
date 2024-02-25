@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
 
-    dataCurr = ModalRoute.of(context)!.settings.arguments as Map;
+    dataCurr = dataCurr.isNotEmpty? dataCurr : ModalRoute.of(context)!.settings.arguments as Map ;
     print(dataCurr);
     // time
 
@@ -39,8 +39,17 @@ class _HomeState extends State<Home> {
             child: Column(
               children: <Widget>[
                 TextButton.icon(
-                onPressed: (){
-                  Navigator.pushNamed(context, '/location');
+                onPressed: () async{
+                  dynamic result = await Navigator.pushNamed(context, '/location');
+                  setState(() {
+                    dataCurr = {
+                      'time' : result['time'],
+                      'location' : result['location'],
+                      'isDayTime' : result['isDayTime'],
+                      'flag' : result['flag']
+                    };
+                  });
+
                 },
                 label: Text(
                     'Edit Location',
